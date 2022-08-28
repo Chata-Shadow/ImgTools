@@ -1,65 +1,68 @@
 <template>
 	<view class="container" :style="{height:windowHeight+'px'}">
-		<image class="page-bg" :style="{height:windowHeight+'px'}" mode="aspectFill" src="/static/image/page-bg.png"></image>
+		<image class="page-bg" :style="{height:windowHeight+'px'}" mode="aspectFill" src="/static/image/page-bg.png">
+		</image>
 		<view v-if="SHOW_TIP">
 			<!-- <add-tips :statusBarHeight="statusBarHeight" /> -->
 		</view>
 		<!-- <view style="height: 54px; width: 750rpx; background-color: #C12928; position: absolute;"></view> -->
 
-		<view class="avatar-container grid justify-center" id="avatar-container" @touchstart="touchStart" @touchend="touchEnd"
-		 @touchmove="touchMove">
+		<view class="avatar-container grid justify-center" id="avatar-container" @touchstart="touchStart"
+			@touchend="touchEnd" @touchmove="touchMove">
 			<view class="avatar-bg-border">
 				<image @touchstart="touchAvatarBg" class="bg avatar-bg" id="avatar-bg" :src="avatarPath"></image>
 			</view>
-			<!-- <icon type="cancel" class="cancel" id="cancel" :style="{top:cancelCenterY-10 + 'px', left:cancelCenterX-10 + 'px'}"></icon> -->
-			<!-- <icon type="waiting" class="handle" id="handle" color="green" :style="{top:handleCenterY-10 + 'px', left:handleCenterX-10 +'px'}"></icon> -->
-			<!-- <text class="cuIcon-order cancel circle" @click="flipHorizontal" id="cancel" :style="{top:cancelCenterY-10 + 'px', left:cancelterX-10 +'px'}"></text> -->
-			<image v-if="currentMaskId > -1" class="mask flip-horizontal" :class="{maskWithBorder: showBorder}" id='mask' :src="maskPic"
-			 :style="{top:maskCenterY-maskSize/2-2+'px', left:maskCenterX-maskSize/2-2+'px',
+			<image v-if="currentMaskId > -1" class="mask flip-horizontal" :class="{maskWithBorder: showBorder}"
+				id='mask' :src="maskPic" :style="{top:maskCenterY-maskSize/2-2+'px', left:maskCenterX-maskSize/2-2+'px',
 				transform: 'rotate(' +rotate+ 'deg)' + 'scale(' +scale+')' + 'rotateY('+ rotateY +'deg)'}"></image>
-			<text class="cuIcon-full handle circle" :class="{hideHandle: !showBorder}" id="handle" :style="{top:handleCenterY-10 + 'px', left:handleCenterX-10 +'px'}"></text>
-			<text class="cuIcon-order cancel circle" v-if="isAndroid" :class="{hideHandle: !showBorder}" id="cancel" @click="flipHorizontal"
+			<text class="cuIcon-full handle circle" :class="{hideHandle: !showBorder}" id="handle"
+				:style="{top:handleCenterY-10 + 'px', left:handleCenterX-10 +'px'}"></text>
+			<text class="cuIcon-order cancel circle" v-if="isAndroid" :class="{hideHandle: !showBorder}" id="cancel"
+				@click="flipHorizontal"
 			 :style="{top:cancelCenterY-10 + 'px', left:cancelCenterX-10 +'px', transform: 'rotate(' +90+ 'deg)'}"></text>
 		</view>
 		<view>
-			<canvas class="cans-id-mask" canvas-id="cans-id-mask" style="height:270px;width:270px;margin-left: auto;margin-right: auto;" />
+			<canvas class="cans-id-mask" canvas-id="cans-id-mask"
+				style="height:270px;width:270px;margin-left: auto;margin-right: auto;" />
 		</view>
 		<view class="flex-sub text-center">
 			<view class="solid-bottom">
-				<text class="text-yellow text-bold">戴上口罩 远离病毒 从你我做起</text>
+				<text class="text-yellow text-bold">点击下方按钮选择图片和压缩比率，点击保存按钮保存到相册</text>
 			</view>
 		</view>
 		<view class="grid justify-around action-wrapper">
 			<view class="grid col-1">
-				<button id="btn-my-avatar" class="cu-btn round action-btn bg-yellow shadow " open-type="getUserInfo" @getuserinfo="getUserInfoCallBack">我的头像</button>
+				<button id="btn-choose-img" class="cu-btn round action-btn bg-yellow shadow"
+					@click="chooseImage">选择图片</button>
 			</view>
 			<view class="grid col-2">
 				<button id="btn-save" class="cu-btn round action-btn bg-yellow shadow" @click="draw">
 					<!-- <text class="cuIcon-down"> -->
-					</text>保存</button>
-			</view>
-			<view class="grid col-3">
-				<button id="btn-choose-img" class="cu-btn round action-btn bg-yellow shadow" @click="chooseImage">选择图片</button>
+					</text>保存
+				</button>
 			</view>
 		</view>
+
+		<view class="grid justify-around action-wrapper">
+
+			<view class="section section_gap">
+				<view class="grid col-1">
+					<text class="text-yellow text-bold">设置压缩质量（越小压缩效果越好）</text>
+					<view class="body-view">
+						<slider value="sliderchange" min="0" max="100" show-value />
+					</view>
+				</view>
+			</view>
+		</view>
+
 		<view class="grid justify-around share-wrapper">
 			<!-- <view class="grid col-2 animation-shake animation-speed-2 animation-delay-3">
 				<button class="cu-btn block line-orange lg share-btn" open-type="share">
 					<text class="cuIcon-upload"></text> <text class="text-yellow">分享给好友</text> </button>
 			</view> -->
-			<ad unit-id="adunit-85230d6cd9a1beee"></ad>
-
+			<!-- 			<ad unit-id="adunit-85230d6cd9a1beee"></ad>
+ -->
 		</view>
-
-		<scroll-view class="scrollView mask-scroll-view" scroll-x="true">
-			<view v-for="(item,index) in imgList" :key="index" style="display: inline-flex;">
-				<text v-if="currentMaskId == index && isAndroid" class="cuIcon-order cancel circle" @click="flipHorizontal" id="cancel"
-				 :style="{transform: 'rotate(' +90+ 'deg)'}"></text>
-				<!-- <text v-if="currentMaskId == index" style="margin-left: 55px;" class="cuIcon-question cancel circle" @click="showTips"
-				 id="cancel"></text> -->
-				<image class="imgList" :src="'/static/image/mask/'+ index +'.png'" :data-mask-id="index" @tap="changeMask"></image>
-			</view>
-		</scroll-view>
 
 		<view class="cu-modal" :class="modalName=='saveTip'?'show':''">
 			<view class="cu-dialog">
@@ -68,16 +71,6 @@
 					<view class="action" @tap="hideModal">
 						<text class="cuIcon-close text-red"></text>
 					</view>
-				</view>
-				<view class="padding-xl">
-					预防千万条，口罩第一条。
-					健康第一位，不要吃野味。
-					不往人群挤，病毒不找你。
-					洗手很重要，胜过吃补药。
-					通风也要紧，疾病无踪影。
-				</view>
-				<view class="padding">
-					祝大家平安过节！戴口罩，勤洗手，早睡早起，健康美丽！
 				</view>
 				<view class="cu-bar bg-white justify-end">
 					<view class="action">
@@ -150,6 +143,8 @@
 				touch_target: "",
 				start_x: 0,
 				start_y: 0,
+				sliderchange: 15,
+				tempFilePath: ""
 			}
 		},
 		computed: {
@@ -167,7 +162,7 @@
 			}
 
 			let _this = this;
-			
+
 			// 在页面onLoad回调事件中创建插屏广告实例
 			// if (wx.createInterstitialAd) {
 			// 	interstitialAd = wx.createInterstitialAd({
@@ -179,7 +174,7 @@
 			// 	})
 			// 	interstitialAd.onClose(() => {})
 			// }
-			
+
 			// // 在页面onLoad回调事件中创建激励视频广告实例
 			// if (wx.createRewardedVideoAd) {
 			// 	videoAd = wx.createRewardedVideoAd({
@@ -228,14 +223,14 @@
 		},
 		onShow() {
 			console.log("onShow");
-			
+
 			// 在适合的场景显示插屏广告
 			// if (interstitialAd) {
 			//   interstitialAd.show().catch((err) => {
 			//     console.error(err)
 			//   })
 			// }
-			
+
 			if (getApp().globalData.rapaintAfterCrop) {
 				getApp().globalData.rapaintAfterCrop = false;
 				this.avatarPath = getApp().globalData.cropImageFilePath;
@@ -323,50 +318,20 @@
 				this.start_x = current_x;
 				this.start_y = current_y;
 			},
-			/**
-			 *  获取用户信息回调方法
-			 * @param {Object} result
-			 */
-			getUserInfoCallBack(result) {
-				console.log('mpGetUserInfo', result);
-				if (result.detail.errMsg !== 'getUserInfo:ok') {
-					uni.showModal({
-						title: '获取用户头像失败',
-						content: '用户信息仅用于创建新的图片，请放心使用',
-						showCancel: false
-					});
-					return;
-				}
-				let userInfo = result.detail.userInfo;
-				userInfo.avatarUrl = userInfo.avatarUrl.replace("132", "0"); // 使用最大分辨率头像 959 * 959
-				getApp().globalData.userAvatarUrl = userInfo.avatarUrl;
-				uni.showLoading({
-					title: '头像加载中...'
-				});
-				let self = this;
-				uni.downloadFile({
-					url: userInfo.avatarUrl,
-					success: function(res) {
-						uni.hideLoading();
-						self.avatarPath = res.tempFilePath;
-						getApp().globalData.userAvatarFilePath = res.tempFilePath;
-					},
-					fail: function(e) {
-						console.log(e);
-						uni.hideLoading();
-						uni.showModal({
-							title: '图片加载超时',
-							content: '检查网络，点击确定重新加载',
-							success(res) {
-								if (res.confirm) {
-									self.downloadAvatarAndPaintAll(imageUrl);
-								} else if (res.cancel) {
-									console.log('用户点击取消');
-								}
-							}
-						})
+			//压缩图片
+			compressImage: function(imgurl) {
+				var that = this;
+				console.log(that.sliderchange)
+				wx.compressImage({
+					src: imgurl,
+					quality: that.sliderchange,
+					success(res) {
+			 		    var temp = res.tempFilePath;
+						that.tempFilePath = temp
+						that.avatarPath = imgurl
+						console.log(that.tempFilePath)
 					}
-				})
+				});
 			},
 
 			/**
@@ -380,7 +345,10 @@
 					sourceType: ['album', 'camera'],
 					success: function(res) {
 						let tempImagePath = res.tempFilePaths[0];
-						self.imageCheck(tempImagePath, self.loadRecImageOrStartToCrop);
+						console.log(tempImagePath)
+						self.compressImage(tempImagePath)
+						//self.imageCheck(tempImagePath, self.loadRecImageOrStartToCrop);
+
 					}
 				});
 			},
@@ -438,7 +406,7 @@
 					}
 					pc.drawImage(_this.maskPic, -mask_size / 2, -mask_size / 2, mask_size, mask_size);
 					pc.draw();
-					
+
 					// 有成功加载的激励视频，才展现提示框
 					if (!!videoAd && _this.rewardedVideoAdLoaded) {
 						uni.showModal({
@@ -486,60 +454,46 @@
 					title: '保存...',
 					mask: true
 				})
-				uni.canvasToTempFilePath({
-					x: 0,
-					y: 0,
-					height: this.cansWidth,
-					width: this.cansHeight,
-					destWidth: this.cansWidth * 3,
-					destHeight: this.cansHeight * 3,
-					canvasId: 'cans-id-mask',
+				uni.hideLoading();
+				getApp().globalData.maskAvatarSavedTempPath = _this.tempFilePath;
+				uni.saveImageToPhotosAlbum({
+					filePath: _this.tempFilePath,
 					success: function(res) {
-						uni.hideLoading();
-						getApp().globalData.maskAvatarSavedTempPath = res.tempFilePath;
-						uni.saveImageToPhotosAlbum({
-							filePath: res.tempFilePath,
-							success: function(res) {
-								if (_this.savedCounts == 0) {
-									_this.modalName = 'saveTip';
-								} else {
-									uni.showToast({
-										title: '请至相册查看'
-									})
-								}
-								_this.savedCounts++;
-								uni.vibrateShort({
-									success: function() {
-										console.log('vibrateShort');
-									}
-								});
-							},
-							fail(res) {
-								console.log(res)
-								if (res.errMsg.indexOf("fail")) {
-									uni.showModal({
-										title: '您需要授权相册权限',
-										success(res) {
-											if (res.confirm) {
-												uni.openSetting({
-													success(res) {
-														console.log("相册授权成功");
-													},
-													fail(res) {
-														console.log(res)
-													}
-												})
-											}
-										}
-									})
-								}
+						if (_this.savedCounts == 0) {
+							_this.modalName = 'saveTip';
+						} else {
+							uni.showToast({
+								title: '请至相册查看'
+							})
+						}
+						_this.savedCounts++;
+						uni.vibrateShort({
+							success: function() {
+								console.log('vibrateShort');
 							}
 						});
 					},
 					fail(res) {
-						uni.hideLoading()
+						console.log(res)
+						if (res.errMsg.indexOf("fail")) {
+							uni.showModal({
+								title: '您需要授权相册权限',
+								success(res) {
+									if (res.confirm) {
+										uni.openSetting({
+											success(res) {
+												console.log("相册授权成功");
+											},
+											fail(res) {
+												console.log(res)
+											}
+										})
+									}
+								}
+							})
+						}
 					}
-				}, this)
+				});
 			},
 			showModal: function(e) {
 				this.modalName = e.currentTarget.dataset.target;
@@ -564,41 +518,42 @@
 								uni.showLoading({
 									title: '加载中...'
 								});
+
 								//这里是 云函数调用方法
-								wx.cloud.callFunction({
-									name: 'contentCheck',
-									data: {
-										value: buffer.data
-									},
-									success(json) {
-										console.log("checkContent result", json)
-										if (json.result.errCode == 87014) {
-											uni.showModal({
-												title: '请勿使用违法违规内容',
-												content: '图片含有违法违规内容',
-												showCancel: false,
-												confirmText: '知道了',
-											});
-											console.log("bad")
-										} else {
-											console.log("good")
-											//图片合规则进行进一步处理
-											callback(tempImagePath);
-										}
-									},
-									fail(e) {
-										console.log(e);
-										uni.showModal({
-											title: '请重试',
-											content: '对不起，服务器开了小差',
-											showCancel: false,
-											confirmText: '好的',
-										});
-									},
-									complete() {
-										uni.hideLoading();
-									}
-								})
+								// wx.cloud.callFunction({
+								// 	name: 'contentCheck',
+								// 	data: {
+								// 		value: buffer.data
+								// 	},
+								// 	success(json) {
+								// 		console.log("checkContent result", json)
+								// 		if (json.result.errCode == 87014) {
+								// 			uni.showModal({
+								// 				title: '请勿使用违法违规内容',
+								// 				content: '图片含有违法违规内容',
+								// 				showCancel: false,
+								// 				confirmText: '知道了',
+								// 			});
+								// 			console.log("bad")
+								// 		} else {
+								// 			console.log("good")
+								// 			//图片合规则进行进一步处理
+								// 			callback(tempImagePath);
+								// 		}
+								// 	},
+								// 	fail(e) {
+								// 		console.log(e);
+								// 		uni.showModal({
+								// 			title: '请重试',
+								// 			content: '对不起，服务器开了小差',
+								// 			showCancel: false,
+								// 			confirmText: '好的',
+								// 		});
+								// 	},
+								// 	complete() {
+								// 		uni.hideLoading();
+								// 	}
+								// })
 							}
 						})
 

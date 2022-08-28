@@ -128,7 +128,7 @@
 				"pagePath": "pages/mask/add-mask",
 				"iconPath": "static/image/tabbar/mask-off.png",
 				"selectedIconPath": "static/image/tabbar/mask-on.png",
-				"text": "戴口罩"
+				"text": "图片压缩"
 			},
 			{
 				"pagePath": "pages/slogan/add-slogan",

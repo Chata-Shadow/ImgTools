@@ -3,10 +3,6 @@
 		<view v-if="SHOW_TIP">
 			<add-tips :statusBarHeight="statusBarHeight" />
 		</view>
-		<!-- <view class="logo-area" :style="{top: statusBarHeight + 'px;'}">
-			<image style="width: 25px; height: 25px;" src="../../static/image/rwzc-logo-round.png"></image>
-			<text class="text-yellow text-bold text-sm">人文之窗公众号</text>
-		</view> -->
 		<view class="menu-list" :style="{'margin-top': statusBarHeight+40+'px' }">
 			<view class="ad-container margin-top cu-list menu sm-border card-menu">
 				<!-- <ad unit-id="adunit-28338c7d91d145af"></ad> -->
@@ -15,38 +11,16 @@
 			<view class="cu-card article" @click="addMask" >
 				<view class="cu-item shadow" style="margin: 30rpx 30rpx 0rpx 30rpx; ">
 					<view class="title">
-						<view class="text-cut"> 头像戴口罩 </view>
+						<view class="text-cut"> 图片压缩 </view>
 					</view>
 					<view class="content">
 						<image style="width: 180rpx;" src="/static/image/logo/mask-logo.png" mode="aspectFill"></image>
 						<view class="desc">
-							<view class="text-content"> 换上口罩头像，防止疫情蔓延。    超过30款口罩、护目镜任你选！</view>
+							<view class="text-content"> 在线图片压缩，可在线选择压缩比例和大小。</view>
 							<view>
 								<view class="grid justify-between">
 									<view>
-										<view class="cu-tag bg-red light sm round">防疫情，保健康</view>
-										<!-- <view class="cu-tag bg-green light sm round">保健康</view> -->
-									</view>
-									
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="cu-card article" @click="nasa" >
-				<view class="cu-item shadow" style="margin: 30rpx 30rpx 0rpx 30rpx; ">
-					<view class="title">
-						<view class="text-cut"> 生日那天的宇宙 </view>
-					</view>
-					<view class="content">
-						<image style="width: 180rpx;" src="/static/image/logo/nasa.jpeg" mode="aspectFill"></image>
-						<view class="desc">
-							<view class="text-content"> 快来看看你生日那天，哈勃望远镜看到了怎样的宇宙星空！</view>
-							<view>
-								<view class="grid justify-between">
-									<view>
-										<view class="cu-tag bg-red light sm round">全宇宙独一无二的生日礼物</view>
+										<view class="cu-tag bg-red light sm round">图片压缩</view>
 										<!-- <view class="cu-tag bg-green light sm round">保健康</view> -->
 									</view>
 									
@@ -116,18 +90,6 @@
 								</view>
 							</view>
 						</view>
-					</view>
-				</view>
-			</view>
-			<view class="about-actions margin-top cu-list menu sm-border card-menu animation-shake animation-speed-2 animation-delay-3">
-				<view class="cu-item arrow feedback-btn">
-					<view class="content">
-						<button class="free-btn-bordernone" open-type="contact">
-							<tui-icon name="kefu" color="green" :size="20"></tui-icon>
-							<text style="color: grey; padding-left: 10px;" class="text-sm">
-								联系客服
-							</text>
-						</button>
 					</view>
 				</view>
 			</view>
@@ -211,18 +173,6 @@
 			addMask: function() {
 				uni.switchTab({
 					url: '/pages/mask/add-mask'
-				})
-			},
-			nasa: function() {
-				wx.navigateToMiniProgram({
-					appId: 'wxd44e78294c5c5401',
-					path: 'pages/board/borad',
-					success(res) {
-						console.log(res);
-					},
-					fail(e) {
-						console.log(e);
-					}
 				})
 			},
 			addSlogan: function(){
